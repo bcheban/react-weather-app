@@ -17,8 +17,8 @@ const FeelsLikeIcon = ({ temp }) => {
 
 const DetailItem = ({ label, value, icon }) => (
   <div className="p-4 flex flex-col items-center justify-between text-center space-y-2 rounded-[10px] bg-[#d9d9d9] min-h-[190px] xl:h-[217px]">
-    <p className="text-sm xl:text-[16px] font-medium text-black">{label}</p>
-    <p className="text-2xl xl:text-[32px] font-bold text-black">{value}</p>
+    <p className="text-sm xl:text-[16px] font-family-montserrat font-medium text-[16px] text-center text-black">{label}</p>
+    <p className="text-2xl xl:text-[32px] font-family-montserrat font-medium text-[32px] text-center text-black">{value}</p>
     <div className="pt-2">{icon}</div>
   </div>
 );
@@ -78,12 +78,12 @@ const WeatherDetails = ({ details }) => {
                 key={i}
                 className="bg-[#d9d9d9] rounded-[10px] p-4 flex flex-col items-center justify-center text-center space-y-2 min-h-[190px] xl:h-[217px]"
               >
-                <p className="text-sm xl:text-[16px] font-medium text-black">Min °C</p>
-                <p className="text-2xl xl:text-[32px] font-bold text-black">
+                <p className="text-sm xl:text-[16px] font-family-montserrat font-medium text-[16px] text-center text-black">Min °C</p>
+                <p className="text-2xl xl:text-[32px] font-family-montserrat font-medium text-[32px] text-center text-black">
                   {details.minTemp}°C
                 </p>
-                <p className="text-sm font-medium text-black mt-2 xl:text-[16px]">Max °C</p>
-                <p className="text-2xl xl:text-[32px] font-bold text-black">
+                <p className="text-sm mt-2 xl:text-[16px] font-family-montserrat font-medium text-[16px] text-center text-black">Max °C</p>
+                <p className="text-2xl xl:text-[32px] font-family-montserrat font-medium text-[32px] text-center text-black">
                   {details.maxTemp}°C
                 </p>
               </div>

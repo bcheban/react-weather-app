@@ -37,10 +37,21 @@ const LoginModal = ({ isOpen, onClose, onSwitchToSignUp, onLoginSuccess }) => {
       onClick={onClose}
     >
       <div
-        className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-sm"
+        className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-sm relative"
         onClick={(e) => e.stopPropagation()}
       >
-        <h2 className="text-2xl font-bold text-center text-black mb-6">Log in</h2>
+        <button 
+          type="button" 
+          onClick={onClose} 
+          className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"
+          aria-label="Close modal"
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+
+        <h2 className="text-2xl text-center mb-6 font-family-montserrat-alternates font-medium text-[20px] text-black">Log in</h2>
 
         <Formik
           initialValues={{ email: '', password: '' }}
@@ -52,7 +63,7 @@ const LoginModal = ({ isOpen, onClose, onSwitchToSignUp, onLoginSuccess }) => {
               <div>
                 <label
                   htmlFor="login-email"
-                  className="block text-sm font-medium text-gray-700 mb-2"
+                  className="block text-sm mb-2 font-family-montserrat font-medium text-[14px] text-black"
                 >
                   E-Mail
                 </label>
@@ -61,7 +72,7 @@ const LoginModal = ({ isOpen, onClose, onSwitchToSignUp, onLoginSuccess }) => {
                   id="login-email"
                   name="email"
                   placeholder="Enter your email"
-                  className="w-full p-3 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400"
+                  className="w-full p-3 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 font-family-montserrat font-medium text-[14px] text-[#ababab]"
                 />
                 <ErrorMessage
                   name="email"
@@ -73,7 +84,7 @@ const LoginModal = ({ isOpen, onClose, onSwitchToSignUp, onLoginSuccess }) => {
               <div>
                 <label
                   htmlFor="login-password"
-                  className="block text-sm font-medium text-gray-700 mb-2"
+                  className="block text-sm mb-2 font-family-montserrat font-medium text-[14px] text-black"
                 >
                   Password
                 </label>
@@ -82,7 +93,7 @@ const LoginModal = ({ isOpen, onClose, onSwitchToSignUp, onLoginSuccess }) => {
                   id="login-password"
                   name="password"
                   placeholder="Enter your password"
-                  className="w-full p-3 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400"
+                  className="w-full p-3 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 font-family-montserrat font-medium text-[14px] text-[#ababab]"
                 />
                 <ErrorMessage
                   name="password"
@@ -94,7 +105,7 @@ const LoginModal = ({ isOpen, onClose, onSwitchToSignUp, onLoginSuccess }) => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full py-3 mt-4 bg-[#ffb36c] text-black font-semibold rounded-lg hover:bg-orange-500 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+                className="w-full py-3 mt-4 bg-[#ffb36c] rounded-lg hover:bg-orange-500 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed font-family-montserrat font-normal text-[14px] text-black"
               >
                 {isSubmitting ? 'Logging in...' : 'Log in'}
               </button>
@@ -102,14 +113,10 @@ const LoginModal = ({ isOpen, onClose, onSwitchToSignUp, onLoginSuccess }) => {
           )}
         </Formik>
 
-        <p className="text-center text-sm text-gray-600 mt-6">
-          Don't have an account?{' '}
-          <button
+        <p className="text-center text-sm mt-6 font-family-montserrat font-medium text-[12px] text-black">Don't have an account? <button
             type="button"
             onClick={onSwitchToSignUp}
-            className="font-semibold text-orange-600 hover:underline"
-          >
-            Sign Up
+            className="font-semibold text-orange-600 hover:underline">Sign Up
           </button>
         </p>
       </div>

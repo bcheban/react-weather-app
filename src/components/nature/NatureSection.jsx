@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, forwardRef } from 'react';
 import { fetchNatureImages } from '../../services/imageApi';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -26,16 +26,16 @@ const ErrorMessage = ({ message }) => (
   </div>
 );
 
-const SectionWrapper = ({ children }) => (
-  <section className="bg-white pt-8 pb-16 px-4 sm:px-6 lg:px-8">
+const SectionWrapper = forwardRef(({ children }, ref) => (
+  <section ref={ref} className="bg-white pt-8 pb-16 px-4 sm:px-6 lg:px-8">
     <div className="max-w-7xl mx-auto">
-      <h2 className="text-xl sm:text-2xl mb-12 font-bold text-black lg:font-medium lg:text-[20px]">Beautiful nature</h2>
+      <h2 className="text-xl sm:text-2xl mb-12 lg:font-medium lg:text-[20px] font-family-montserrat font-medium text-[20px] text-black">Beautiful nature</h2>
       {children}
     </div>
   </section>
-);
+));
 
-const NatureSection = () => {
+const NatureSection = forwardRef((props, ref) => {
   const [images, setImages] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -56,7 +56,7 @@ const NatureSection = () => {
 
   if (isLoading) {
     return (
-      <SectionWrapper>
+      <SectionWrapper ref={ref}>
         <GallerySkeleton />
       </SectionWrapper>
     );
@@ -64,14 +64,14 @@ const NatureSection = () => {
 
   if (error) {
     return (
-      <SectionWrapper>
+      <SectionWrapper ref={ref}>
         <ErrorMessage message={error} />
       </SectionWrapper>
     );
   }
 
   return (
-    <SectionWrapper>
+    <SectionWrapper ref={ref}>
       <Swiper
         modules={[Navigation, Pagination, A11y, EffectCoverflow]}
         effect="coverflow"
@@ -126,6 +126,6 @@ const NatureSection = () => {
       </Swiper>
     </SectionWrapper>
   );
-};
+});
 
 export default NatureSection;

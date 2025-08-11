@@ -54,10 +54,21 @@ const SignUpModal = ({ isOpen, onClose, onSwitchToLogin, onRegisterSuccess }) =>
       onClick={onClose}
     >
       <div
-        className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-sm"
+        className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-sm relative"
         onClick={handleModalContentClick}
       >
-        <h2 className="text-2xl font-bold text-center text-black mb-6">Sign Up</h2>
+        <button 
+          type="button" 
+          onClick={onClose} 
+          className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"
+          aria-label="Close modal"
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+
+        <h2 className="text-2xl text-center mb-6 font-family-montserrat-alternates font-medium text-[20px] text-black">Sign Up</h2>
 
         <Formik
           initialValues={{ username: '', email: '', password: '' }}
@@ -72,7 +83,7 @@ const SignUpModal = ({ isOpen, onClose, onSwitchToLogin, onRegisterSuccess }) =>
                 { label: 'Password', name: 'password', type: 'password', placeholder: 'Enter your password' },
               ].map(({ label, name, type, placeholder }) => (
                 <div key={name}>
-                  <label htmlFor={name} className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor={name} className="block text-sm mb-2 font-family-montserrat font-medium text-[14px] text-black">
                     {label}
                   </label>
                   <Field
@@ -80,7 +91,7 @@ const SignUpModal = ({ isOpen, onClose, onSwitchToLogin, onRegisterSuccess }) =>
                     id={name}
                     name={name}
                     placeholder={placeholder}
-                    className="w-full p-3 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400"
+                    className="w-full p-3 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 font-family-montserrat font-medium text-[12px] text-[#ababab]"
                   />
                   <ErrorMessage name={name} component="div" className="text-red-500 text-xs mt-1" />
                 </div>
@@ -89,7 +100,7 @@ const SignUpModal = ({ isOpen, onClose, onSwitchToLogin, onRegisterSuccess }) =>
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full py-3 mt-4 bg-[#ffb36c] text-black font-semibold rounded-lg hover:bg-orange-500 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+                className="w-full py-3 mt-4 bg-[#ffb36c] rounded-lg hover:bg-orange-500 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed font-family-montserrat font-normal text-[14px] text-black"
               >
                 {isSubmitting ? 'Registering...' : 'Sign Up'}
               </button>
@@ -97,7 +108,7 @@ const SignUpModal = ({ isOpen, onClose, onSwitchToLogin, onRegisterSuccess }) =>
           )}
         </Formik>
 
-        <p className="text-center text-sm text-gray-600 mt-6">Already have an account? <button
+        <p className="text-center text-sm mt-6 font-family-montserrat font-medium text-[12px] text-black">Already have an account? <button
             type="button"
             onClick={onSwitchToLogin}
             className="font-semibold text-orange-600 hover:underline">Log In</button>

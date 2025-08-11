@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Navbar from './components/layout/Navbar';
 import Hero from './components/layout/Hero';
 import WeatherDisplay from './components/weather/WeatherDisplay';
@@ -7,8 +7,8 @@ import ForecastDetails from './components/weather/ForecastDetails';
 import NewsSection from './components/news/NewsSection';
 import NatureSection from './components/nature/NatureSection';
 import Footer from './components/layout/Footer';
-import SignUpModal from './components/auth/SignUpModal';
-import LoginModal from './components/auth/LoginModal';
+import SignUpModal from './components/modals/SignUpModal';
+import LoginModal from './components/modals/LoginModal';
 import { fetchWeatherByCityName, fetchWeatherByCoords } from './services/weatherApi';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -33,6 +33,14 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [refreshingId, setRefreshingId] = useState(null);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const [isFirstSearch, setIsFirstSearch] = useState(false);
+
+  const heroInputRef = useRef(null);
+  const navbarRef = useRef(null);
+  const heroSectionRef = useRef(null);
+  const weatherDisplayRef = useRef(null);
+  const newsSectionRef = useRef(null);
+  const natureSectionRef = useRef(null);
 
   const getUserDataKey = (email) => `weatherAppCities_${email}`;
   const getLikedDataKey = (email) => `weatherAppLikes_${email}`;
@@ -47,6 +55,30 @@ function App() {
     });
   }, []);
 
+  const handleNavigation = useCallback((sectionKey) => {
+    const sectionRefs = {
+      hero: heroSectionRef,
+      weather: weatherDisplayRef,
+      news: newsSectionRef,
+      nature: natureSectionRef,
+    };
+    const targetRef = sectionRefs[sectionKey];
+    if (!targetRef?.current) return;
+
+    if (sectionKey === 'hero') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
+    const navbarHeight = navbarRef.current?.offsetHeight || 80;
+    const elementPosition = targetRef.current.getBoundingClientRect().top + window.scrollY;
+    
+    window.scrollTo({
+      top: elementPosition - navbarHeight - 20,
+      behavior: 'smooth'
+    });
+  }, []);
+
   useEffect(() => {
     const initializeApp = async () => {
       try {
@@ -54,22 +86,13 @@ function App() {
         if (storedUser) {
           const parsedUser = JSON.parse(storedUser);
           setUser(parsedUser);
-
           const storedCities = localStorage.getItem(getUserDataKey(parsedUser.email));
           const storedLikes = localStorage.getItem(getLikedDataKey(parsedUser.email));
-
           const citiesToUpdate = storedCities ? JSON.parse(storedCities) : [];
           const likesToUpdate = storedLikes ? JSON.parse(storedLikes) : [];
-
           if (citiesToUpdate.length > 0) {
             toast.info("Updating weather for your saved cities...");
-            const updatePromises = citiesToUpdate.map(city =>
-              fetchWeatherByCoords(city.coords).catch(err => {
-                console.error(`Failed to update ${city.city}:`, err);
-                toast.error(`Could not update weather for ${city.city}.`);
-                return null;
-              })
-            );
+            const updatePromises = citiesToUpdate.map(city => fetchWeatherByCoords(city.coords).catch(() => null));
             const updatedCitiesResults = await Promise.all(updatePromises);
             const successfullyUpdatedCities = updatedCitiesResults.filter(Boolean);
             setLocations(sortLocations(successfullyUpdatedCities, likesToUpdate));
@@ -77,11 +100,10 @@ function App() {
           setLikedLocations(likesToUpdate);
         }
       } catch (error) {
-        console.error("Failed to parse user or cities from localStorage", error);
+        console.error("Failed to initialize app", error);
       }
       setIsInitialLoading(false);
     };
-
     initializeApp();
   }, [sortLocations]);
 
@@ -93,7 +115,7 @@ function App() {
         localStorage.removeItem(getUserDataKey(user.email));
       }
     }
-  }, [locations, isInitialLoading, user]);
+  }, [locations, user, isInitialLoading]);
 
   useEffect(() => {
     if (!isInitialLoading && user) {
@@ -103,7 +125,7 @@ function App() {
         localStorage.removeItem(getLikedDataKey(user.email));
       }
     }
-  }, [likedLocations, isInitialLoading, user]);
+  }, [likedLocations, user, isInitialLoading]);
 
   const switchToSignUp = useCallback(() => setActiveModal('signup'), []);
   const switchToLogin = useCallback(() => setActiveModal('login'), []);
@@ -128,9 +150,7 @@ function App() {
     setSelectedLocationId(null);
     setExpandedLocationId(null);
     setActiveForecasts({});
-    
     localStorage.removeItem('weatherAppUser');
-    
     toast.info("You have been logged out.");
   }, []);
 
@@ -144,12 +164,16 @@ function App() {
       return;
     }
     setIsLoading(true);
+    setIsFirstSearch(false);
     try {
       const weatherData = await fetchWeatherByCityName(city);
       const updatedLocations = [weatherData, ...locations];
       setLocations(sortLocations(updatedLocations, likedLocations));
       setSelectedLocationId(weatherData.id);
       toast.success(`Successfully added ${weatherData.city}!`);
+      setTimeout(() => {
+        weatherDisplayRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
     } catch (error) {
       toast.error(error.message || "Failed to fetch weather data.");
     } finally {
@@ -157,23 +181,35 @@ function App() {
     }
   }, [locations, user, likedLocations, sortLocations]);
 
+  const handleAddLocationClick = useCallback(() => {
+    setIsFirstSearch(true);
+    const inputElement = heroInputRef.current;
+    if (!inputElement) return;
+    
+    const navbarHeight = navbarRef.current?.offsetHeight || 80;
+    const inputTopPosition = inputElement.getBoundingClientRect().top + window.scrollY;
+    
+    window.scrollTo({
+      top: inputTopPosition - navbarHeight - 20,
+      behavior: 'smooth'
+    });
+
+    setTimeout(() => {
+      inputElement.focus();
+    }, 500);
+  }, []);
+
   const handleDeleteLocation = useCallback((locationId) => {
     setLocations(prev => prev.filter(loc => loc.id !== locationId));
     setLikedLocations(prev => prev.filter(id => id !== locationId));
     if (selectedLocationId === locationId) setSelectedLocationId(null);
     if (expandedLocationId === locationId) setExpandedLocationId(null);
-    setActiveForecasts(prev => {
-        const newForecasts = { ...prev };
-        delete newForecasts[locationId];
-        return newForecasts;
-    });
   }, [selectedLocationId, expandedLocationId]);
 
   const handleToggleLike = useCallback((locationId) => {
     const newLikedLocations = likedLocations.includes(locationId)
       ? likedLocations.filter(id => id !== locationId)
-      : [locationId, ...likedLocations.filter(id => id !== locationId)];
-    
+      : [locationId, ...likedLocations];
     setLikedLocations(newLikedLocations);
     setLocations(prevLocations => sortLocations(prevLocations, newLikedLocations));
   }, [likedLocations, sortLocations]);
@@ -191,16 +227,16 @@ function App() {
       return newExpandedId;
     });
   }, []);
-  
+
   const handleRefreshLocation = useCallback(async (locationId) => {
     const locationToRefresh = locations.find(loc => loc.id === locationId);
     if (!locationToRefresh) return;
     setRefreshingId(locationId);
     try {
       const updatedWeatherData = await fetchWeatherByCoords(locationToRefresh.coords);
-      setLocations(prevLocations => 
+      setLocations(prevLocations =>
         sortLocations(
-          prevLocations.map(loc => loc.id === locationId ? updatedWeatherData : loc), 
+          prevLocations.map(loc => loc.id === locationId ? updatedWeatherData : loc),
           likedLocations
         )
       );
@@ -212,13 +248,8 @@ function App() {
     }
   }, [locations, likedLocations, sortLocations]);
 
-  const handleShowHourly = useCallback((locationId) => {
-    setActiveForecasts(prev => ({ ...prev, [locationId]: 'hourly' }));
-  }, []);
-
-  const handleShowWeekly = useCallback((locationId) => {
-    setActiveForecasts(prev => ({ ...prev, [locationId]: 'weekly' }));
-  }, []);
+  const handleShowHourly = useCallback((locationId) => setActiveForecasts(prev => ({ ...prev, [locationId]: 'hourly' })), []);
+  const handleShowWeekly = useCallback((locationId) => setActiveForecasts(prev => ({ ...prev, [locationId]: 'weekly' })), []);
 
   const expandedLocationData = locations.find(loc => loc.id === expandedLocationId);
   const activeForecastForExpanded = expandedLocationId ? activeForecasts[expandedLocationId] : null;
@@ -230,12 +261,26 @@ function App() {
   return (
     <div className="App bg-white">
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="light" />
-      <Navbar user={user} onLogout={handleLogout} onSignUpClick={switchToSignUp} onLoginClick={switchToLogin} />
-      
+      <Navbar
+        ref={navbarRef}
+        user={user}
+        onLogout={handleLogout}
+        onSignUpClick={switchToSignUp}
+        onLoginClick={switchToLogin}
+        onNavigate={handleNavigation}
+      />
       <main>
-        <Hero onSearch={handleSearch} isLoading={isLoading} />
-        <WeatherDisplay 
-          locations={locations} 
+        <Hero
+          ref={heroSectionRef}
+          inputRef={heroInputRef}
+          onSearch={handleSearch}
+          isLoading={isLoading}
+          isFirstSearch={isFirstSearch}
+          setIsFirstSearch={setIsFirstSearch}
+        />
+        <WeatherDisplay
+          ref={weatherDisplayRef}
+          locations={locations}
           onDeleteLocation={handleDeleteLocation}
           selectedLocationId={selectedLocationId}
           onSelectLocation={handleSelectLocation}
@@ -248,20 +293,18 @@ function App() {
           activeForecasts={activeForecasts}
           likedLocations={likedLocations}
           onToggleLike={handleToggleLike}
+          onAddLocationClick={handleAddLocationClick}
         />
         {expandedLocationData && <WeatherDetails details={expandedLocationData} />}
         {expandedLocationData && <ForecastDetails forecastData={expandedLocationData} activeForecast={activeForecastForExpanded} />}
-        <NewsSection />
-        <NatureSection />
+        <NewsSection ref={newsSectionRef} />
+        <NatureSection ref={natureSectionRef} />
       </main>
-
       <Footer />
-      
       <SignUpModal isOpen={activeModal === 'signup'} onClose={closeModal} onSwitchToLogin={switchToLogin} onRegisterSuccess={handleAuthSuccess} />
       <LoginModal isOpen={activeModal === 'login'} onClose={closeModal} onSwitchToSignUp={switchToSignUp} onLoginSuccess={handleAuthSuccess} />
     </div>
   );
 }
-
 
 export default App;

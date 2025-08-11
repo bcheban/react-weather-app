@@ -15,12 +15,12 @@ const iconMap = {
 
 const ForecastDayItem = ({ day, iconKey, temp, description }) => (
   <div className="flex items-center justify-between bg-[#d9d9d9] p-3 rounded-lg w-full xl:w-[986px] xl:h-[47px] xl:ml-[76px]">
-    <p className="flex-1 font-medium text-sm xl:text-[16px] text-black truncate pr-2">{day}</p>
+    <p className="flex-1 text-sm xl:text-[16px] truncate pr-2 font-family-montserrat font-medium text-[16px] text-black">{day}</p>
     <div className="flex items-center justify-center space-x-2 xl:space-x-[13px]">
       {iconMap[iconKey] || <img src={clearSkyIcon} alt="Weather Icon" className="w-10 h-10 xl:w-[45px] xl:h-[45px]" />}
-      <p className="font-medium text-sm xl:text-[16px] text-black">{temp}</p>
+      <p className="text-sm xl:text-[16px] font-family-montserrat font-medium text-[16px] text-black">{temp}</p>
     </div>
-    <p className="flex-1 font-medium text-sm xl:text-[16px] text-black text-right truncate pl-2 xl:mr-[50px]">{description}</p>
+    <p className="flex-1 text-sm xl:text-[16px] truncate pl-2 xl:mr-[50px] font-family-montserrat font-medium text-[16px] text-right text-black">{description}</p>
   </div>
 );
 
@@ -33,7 +33,7 @@ const WeeklyForecast = ({ data }) => {
 
   return (
     <div className="w-full max-w-7xl mx-auto p-4 rounded-2xl shadow-md bg-[#e8e8e8] xl:w-[1200px] xl:h-[425px] xl:max-w-none xl:ml-[-152px]">
-      <h3 className="text-lg font-bold text-gray-800 mb-5 xl:mt-6 xl:ml-[76px]">5-day forecast</h3>
+      <h3 className="text-lg mb-5 xl:mt-6 xl:ml-[76px] font-family-montserrat font-semibold text-[16px] text-black">5-day forecast</h3>
       <div className="space-y-3">
         {forecastDataToShow.map((item, index) => (
           <ForecastDayItem

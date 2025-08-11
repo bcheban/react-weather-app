@@ -24,8 +24,17 @@ ChartJS.register(
 const HourlyForecast = ({ data }) => {
   if (!data || data.length === 0) return null;
 
+  const formatHour = (hour) => {
+    const suffix = hour >= 12 ? 'pm' : 'am';
+    let displayHour = hour % 12;
+    if (displayHour === 0) {
+      displayHour = 12;
+    }
+    return `${displayHour}${suffix}`;
+  };
+
   const chartData = {
-    labels: data.map((d) => d.hour),
+    labels: data.map((d) => formatHour(d.hour)),
     datasets: [
       {
         label: 'Temperature',
@@ -52,11 +61,12 @@ const HourlyForecast = ({ data }) => {
         display: true,
         text: 'Hourly forecast',
         align: 'start',
+        color: '#000',
         font: {
-          size: 18,
-          weight: 'bold',
+          family: 'Montserrat',
+          size: 16,
+          weight: '600',
         },
-        color: '#374151',
         padding: {
           bottom: 20,
         },
@@ -71,6 +81,7 @@ const HourlyForecast = ({ data }) => {
         ticks: {
           color: '#000',
           font: {
+            family: 'Montserrat',
             size: 11,
             weight: '500',
           },
@@ -85,6 +96,7 @@ const HourlyForecast = ({ data }) => {
           color: '#000',
           callback: (value) => value + '°C',
           font: {
+            family: 'Montserrat',
             size: 11,
             weight: '500',
           },

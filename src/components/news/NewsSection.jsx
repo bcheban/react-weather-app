@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, forwardRef } from 'react';
 import { fetchLatestNews } from '../../services/newsApi';
 
 const NEWS_PER_PAGE = 4;
@@ -12,7 +12,7 @@ const NewsArticleCard = ({ imageUrl, description, url }) => (
         className="w-full h-48 object-cover transform transition-transform duration-300 ease-in-out group-hover:scale-110"
       />
     </div>
-    <p className="mt-4 text-sm font-medium text-gray-700 group-hover:text-orange-600 transition-colors">{description}</p>
+    <p className="mt-4 text-sm group-hover:text-orange-600 transition-colors font-family-montserrat font-medium text-[16px] text-black">{description}</p>
   </a>
 );
 
@@ -35,7 +35,7 @@ const ErrorMessage = ({ message }) => (
   </div>
 );
 
-const NewsSection = () => {
+const NewsSection = forwardRef((props, ref) => {
   const [articles, setArticles] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalResults, setTotalResults] = useState(0);
@@ -79,9 +79,9 @@ const NewsSection = () => {
 
   if (isLoading) {
     return (
-      <section className="bg-white py-16 px-4 sm:px-6 lg:px-8">
+      <section ref={ref} className="bg-white py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-xl sm:text-2xl mb-8 font-bold text-black">News</h2>
+          <h2 className="text-xl sm:text-2xl mb-8 font-family-montserrat font-medium text-[20px] text-black">News</h2>
           <NewsSkeleton />
         </div>
       </section>
@@ -90,9 +90,9 @@ const NewsSection = () => {
 
   if (error && articles.length === 0) {
     return (
-        <section className="bg-white py-16 px-4 sm:px-6 lg:px-8">
+        <section ref={ref} className="bg-white py-16 px-4 sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto">
-                <h2 className="text-xl sm:text-2xl mb-8 font-bold text-black">News</h2>
+                <h2 className="text-xl sm:text-2xl mb-8 font-family-montserrat font-medium text-[20px] text-black">News</h2>
                 <ErrorMessage message={error} />
             </div>
         </section>
@@ -100,9 +100,9 @@ const NewsSection = () => {
   }
   
   return (
-    <section className="bg-white py-16 px-4 sm:px-6 lg:px-8">
+    <section ref={ref} className="bg-white py-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-xl sm:text-2xl mb-8 font-bold text-black">News</h2>
+        <h2 className="text-xl sm:text-2xl mb-8 font-family-montserrat font-medium text-[20px] text-black">News</h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
           {articles.map(({ id, imageUrl, description, url }) => (
@@ -119,7 +119,8 @@ const NewsSection = () => {
             <button
               onClick={handleSeeMore}
               disabled={isAddingMore}
-              className="bg-[#FFB36C] text-gray-800 font-semibold px-6 py-3 rounded-lg hover:bg-orange-500 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+              className=" hover:bg-orange-500 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed font-family-montserrat font-medium text-[16px] text-black rounded-[10px] px-[30px] py-[10px] w-[138px] h-[40px] bg-[#ffb36c]
+"
             >
               {isAddingMore ? 'Loading...' : 'See more'}
             </button>
@@ -128,6 +129,6 @@ const NewsSection = () => {
       </div>
     </section>
   );
-};
+});
 
 export default NewsSection;
