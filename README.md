@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="https://react-weather-app-ecru-eight.vercel.app/">Live Demo</a> |
+  <a href="https://react-weather-dashboard.vercel.app/">Live Demo</a> |
   <a href="https://github.com/bcheban/react-weather-app">GitHub Repo</a>
 </p>
 
