@@ -22,6 +22,7 @@ const FullPageLoader = () => (
   </div>
 );
 
+
 function App() {
   const [activeModal, setActiveModal] = useState(null);
   const [user, setUser] = useState(null);

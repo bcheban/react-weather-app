@@ -118,7 +118,7 @@ const Hero = forwardRef(({ onSearch, isLoading, isFirstSearch, setIsFirstSearch,
               value={query}
               onChange={handleInputChange}
               placeholder="Search location..."
-              className="w-full md:w-[650px] h-[42px] p-4 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-[#ffb36c] disabled:bg-gray-300 bg-[#d9d9d9] font-family-montserrat font-medium text-[14px] text-[#878787]"
+              className="w-full md:w-[650px] h-[42px] p-4 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-[#ffb36c] disabled:bg-gray-300 bg-[#d9d9d9] font-family-montserrat font-medium text-[14px] text-[#000]"
               disabled={isLoading}
             />
             <button
