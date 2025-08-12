@@ -1,6 +1,7 @@
 import React, { useState, forwardRef } from 'react';
 import logo from '../../assets/logo/logo.svg';
 import userIcon from '../../assets/icons/user.svg';
+import ConfirmationModal from '../modals/ConfirmationModal';
 
 const navItems = [
   { name: 'Weather', key: 'weather' },
@@ -10,6 +11,7 @@ const navItems = [
 
 const Navbar = forwardRef(({ user, onLogout, onSignUpClick, onLoginClick, onNavigate }, ref) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
   const headerBgClass = isMenuOpen ? 'bg-[#f3f3f3]' : 'bg-white';
 
@@ -17,6 +19,18 @@ const Navbar = forwardRef(({ user, onLogout, onSignUpClick, onLoginClick, onNavi
     if (typeof onNavigate === 'function') {
       onNavigate(sectionKey);
     }
+    setIsMenuOpen(false);
+  };
+
+  const handleLogoutClick = () => {
+    setIsLogoutModalOpen(true); 
+  };
+
+  const handleConfirmLogout = () => {
+    if (typeof onLogout === 'function') {
+      onLogout();
+    }
+    setIsLogoutModalOpen(false);
     setIsMenuOpen(false);
   };
 
@@ -42,7 +56,7 @@ const Navbar = forwardRef(({ user, onLogout, onSignUpClick, onLoginClick, onNavi
             {user ? (
               <>
                 <span className="font-family-montserrat font-medium text-black">Welcome, {user.username}!</span>
-                <button onClick={onLogout} className="px-4 h-[35px] bg-[#ffb36c] rounded-[10px] flex items-center justify-center text-xs hover:bg-opacity-80 font-family-montserrat-alternates font-medium text-[12px] text-black">
+                <button onClick={handleLogoutClick} className="px-4 h-[35px] bg-[#ffb36c] rounded-[10px] flex items-center justify-center text-xs hover:bg-opacity-80 font-family-montserrat-alternates font-medium text-[12px] text-black">
                   Log Out
                 </button>
               </>
@@ -88,9 +102,9 @@ const Navbar = forwardRef(({ user, onLogout, onSignUpClick, onLoginClick, onNavi
             <div className="border-t border-gray-300 pt-6 mt-2">
               {user ? (
                 <div className="flex flex-col items-center text-center gap-4">
-                  <span className="text-lg  font-family-montserrat font-medium text-black">Welcome, {user.username}!</span>
+                  <span className="text-lg font-family-montserrat font-medium text-black">Welcome, {user.username}!</span>
                   <button 
-                    onClick={() => { onLogout(); setIsMenuOpen(false); }} 
+                    onClick={handleLogoutClick} 
                     className="w-full max-w-xs px-8 py-3 bg-[#ffb36c] rounded-[10px] hover:bg-opacity-80 font-family-montserrat-alternates font-normal text-[10px] text-black"
                   >
                     Log Out
@@ -111,6 +125,15 @@ const Navbar = forwardRef(({ user, onLogout, onSignUpClick, onLoginClick, onNavi
           </div>
         </div>
       )}
+
+      <ConfirmationModal
+        isOpen={isLogoutModalOpen}
+        onClose={() => setIsLogoutModalOpen(false)}
+        onConfirm={handleConfirmLogout}
+        title="Confirm Logout"
+      >
+        Are you sure you want to log out?
+      </ConfirmationModal>
     </>
   );
 });

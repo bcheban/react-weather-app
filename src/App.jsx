@@ -28,7 +28,7 @@ function App() {
   const [locations, setLocations] = useState([]);
   const [likedLocations, setLikedLocations] = useState([]);
   const [selectedLocationId, setSelectedLocationId] = useState(null);
-  const [expandedLocationId, setExpandedLocationId] = useState(null);
+  const [expandedView, setExpandedView] = useState({ id: null, type: null });
   const [activeForecasts, setActiveForecasts] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [refreshingId, setRefreshingId] = useState(null);
@@ -140,6 +140,7 @@ function App() {
     const initialLikedLocations = storedLikes ? JSON.parse(storedLikes) : [];
     setLikedLocations(initialLikedLocations);
     setLocations(sortLocations(initialLocations, initialLikedLocations));
+    setExpandedView({ id: null, type: null });
     closeModal();
   }, [closeModal, sortLocations]);
 
@@ -148,32 +149,34 @@ function App() {
     setLocations([]);
     setLikedLocations([]);
     setSelectedLocationId(null);
-    setExpandedLocationId(null);
+    setExpandedView({ id: null, type: null });
     setActiveForecasts({});
     localStorage.removeItem('weatherAppUser');
     toast.info("You have been logged out.");
   }, []);
 
-  const handleSearch = useCallback(async (city) => {
+  const handleSearch = useCallback(async (cityQuery) => {
     if (!user) {
       toast.error("Please log in to save weather locations.");
       return;
     }
-    if (locations.some(loc => loc.city.toLowerCase() === city.toLowerCase())) {
-      toast.warn(`"${city}" is already in your list.`);
-      return;
-    }
+
     setIsLoading(true);
     setIsFirstSearch(false);
     try {
-      const weatherData = await fetchWeatherByCityName(city);
-      const updatedLocations = [weatherData, ...locations];
-      setLocations(sortLocations(updatedLocations, likedLocations));
-      setSelectedLocationId(weatherData.id);
-      toast.success(`Successfully added ${weatherData.city}!`);
-      setTimeout(() => {
-        weatherDisplayRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 100);
+      const weatherData = await fetchWeatherByCityName(cityQuery);
+
+      if (locations.some(loc => loc.id === weatherData.id)) {
+        toast.warn(`The location "${weatherData.city}" is already in your list.`);
+      } else {
+        const updatedLocations = [weatherData, ...locations];
+        setLocations(sortLocations(updatedLocations, likedLocations));
+        setSelectedLocationId(weatherData.id);
+        toast.success(`Successfully added ${weatherData.city}!`);
+        setTimeout(() => {
+          weatherDisplayRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+      }
     } catch (error) {
       toast.error(error.message || "Failed to fetch weather data.");
     } finally {
@@ -203,8 +206,10 @@ function App() {
     setLocations(prev => prev.filter(loc => loc.id !== locationId));
     setLikedLocations(prev => prev.filter(id => id !== locationId));
     if (selectedLocationId === locationId) setSelectedLocationId(null);
-    if (expandedLocationId === locationId) setExpandedLocationId(null);
-  }, [selectedLocationId, expandedLocationId]);
+    if (expandedView.id === locationId) {
+      setExpandedView({ id: null, type: null });
+    }
+  }, [selectedLocationId, expandedView]);
 
   const handleToggleLike = useCallback((locationId) => {
     const newLikedLocations = likedLocations.includes(locationId)
@@ -214,17 +219,30 @@ function App() {
     setLocations(prevLocations => sortLocations(prevLocations, newLikedLocations));
   }, [likedLocations, sortLocations]);
 
-  const handleSelectLocation = useCallback((locationId) => {
-    setSelectedLocationId(prevId => (prevId === locationId ? null : locationId));
+  const handleCardClick = useCallback((locationId) => {
+    setExpandedView(prev => {
+      const isClosing = prev.id === locationId && prev.type === 'forecast';
+      if (isClosing) {
+        setSelectedLocationId(null);
+        return { id: null, type: null };
+      } else {
+        setActiveForecasts(f => ({ ...f, [locationId]: f[locationId] || 'hourly' }));
+        setSelectedLocationId(locationId);
+        return { id: locationId, type: 'forecast' };
+      }
+    });
   }, []);
 
-  const handleToggleForecast = useCallback((locationId) => {
-    setExpandedLocationId(prevId => {
-      const newExpandedId = prevId === locationId ? null : locationId;
-      if (newExpandedId) {
-        setActiveForecasts(prev => ({ ...prev, [newExpandedId]: prev[newExpandedId] || 'hourly' }));
+  const handleSeeMoreClick = useCallback((locationId) => {
+    setExpandedView(prev => {
+      const isClosing = prev.id === locationId && prev.type === 'details';
+      if (isClosing) {
+        setSelectedLocationId(null);
+        return { id: null, type: null };
+      } else {
+        setSelectedLocationId(locationId);
+        return { id: locationId, type: 'details' };
       }
-      return newExpandedId;
     });
   }, []);
 
@@ -248,11 +266,20 @@ function App() {
     }
   }, [locations, likedLocations, sortLocations]);
 
-  const handleShowHourly = useCallback((locationId) => setActiveForecasts(prev => ({ ...prev, [locationId]: 'hourly' })), []);
-  const handleShowWeekly = useCallback((locationId) => setActiveForecasts(prev => ({ ...prev, [locationId]: 'weekly' })), []);
+  const handleShowHourly = useCallback((locationId) => {
+    setActiveForecasts(prev => ({ ...prev, [locationId]: 'hourly' }));
+    setExpandedView({ id: locationId, type: 'forecast' });
+    setSelectedLocationId(locationId);
+  }, []);
 
-  const expandedLocationData = locations.find(loc => loc.id === expandedLocationId);
-  const activeForecastForExpanded = expandedLocationId ? activeForecasts[expandedLocationId] : null;
+  const handleShowWeekly = useCallback((locationId) => {
+    setActiveForecasts(prev => ({ ...prev, [locationId]: 'weekly' }));
+    setExpandedView({ id: locationId, type: 'forecast' });
+    setSelectedLocationId(locationId);
+  }, []);
+
+  const expandedLocationData = locations.find(loc => loc.id === expandedView.id);
+  const activeForecastForExpanded = expandedView.id ? activeForecasts[expandedView.id] : null;
 
   if (isInitialLoading) {
     return <FullPageLoader />;
@@ -283,11 +310,11 @@ function App() {
           locations={locations}
           onDeleteLocation={handleDeleteLocation}
           selectedLocationId={selectedLocationId}
-          onSelectLocation={handleSelectLocation}
-          onSeeMore={handleToggleForecast}
+          onCardClick={handleCardClick}
+          onSeeMoreClick={handleSeeMoreClick}
           onRefreshLocation={handleRefreshLocation}
           refreshingId={refreshingId}
-          expandedLocationId={expandedLocationId}
+          expandedView={expandedView}
           onShowHourly={handleShowHourly}
           onShowWeekly={handleShowWeekly}
           activeForecasts={activeForecasts}
@@ -295,8 +322,8 @@ function App() {
           onToggleLike={handleToggleLike}
           onAddLocationClick={handleAddLocationClick}
         />
-        {expandedLocationData && <WeatherDetails details={expandedLocationData} />}
-        {expandedLocationData && <ForecastDetails forecastData={expandedLocationData} activeForecast={activeForecastForExpanded} />}
+        {expandedView.type === 'details' && expandedLocationData && <WeatherDetails details={expandedLocationData} />}
+        {expandedView.type === 'forecast' && expandedLocationData && <ForecastDetails forecastData={expandedLocationData} activeForecast={activeForecastForExpanded} />}
         <NewsSection ref={newsSectionRef} />
         <NatureSection ref={natureSectionRef} />
       </main>

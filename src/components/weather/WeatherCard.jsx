@@ -45,14 +45,14 @@ const WeatherCard = ({
   data,
   onDelete,
   isSelected,
-  onSelect,
-  onSeeMore,
+  onCardClick,
+  onSeeMoreClick,
   isRefreshing,
   onRefresh,
   onShowHourly,
   onShowWeekly,
   activeForecast,
-  expandedLocationId,
+  expandedView,
   onToggleFavorite,
   isFavorite
 }) => {
@@ -78,7 +78,7 @@ const WeatherCard = ({
     isRefreshing ? 'opacity-70 cursor-not-allowed' : 'cursor-pointer'
   ].join(' ');
 
-  const isExpanded = id === expandedLocationId;
+  const isExpandedForForecast = expandedView.id === id && expandedView.type === 'forecast';
 
   const handleToggleFavorite = (e) => {
     e.stopPropagation();
@@ -112,7 +112,7 @@ const WeatherCard = ({
       <div
         className={cardClasses}
         style={{ backgroundColor: cardBgColor }}
-        onClick={isRefreshing ? undefined : onSelect}
+        onClick={isRefreshing ? undefined : onCardClick}
       >
         <div className="flex justify-between w-full text-sm">
           <span className="font-family-montserrat font-medium text-[14px] text-black">{city}</span>
@@ -125,14 +125,14 @@ const WeatherCard = ({
             <button
               onClick={e => { e.stopPropagation(); onShowHourly(id); }}
               disabled={isRefreshing}
-              className={`font-family-montserrat text-[10px] text-right px-3 py-1.5 lg:px-[18px] lg:py-2 lg:w-[114px] lg:h-[28px] text-xs lg:text-[10px] font-medium text-black rounded-[10px] transition-colors disabled:cursor-not-allowed ${isExpanded && activeForecast === 'hourly' ? 'bg-[#ffb36c]' : 'bg-gray-300/70 hover:bg-gray-400/50'}`}
+              className={`font-family-montserrat text-[10px] text-right px-3 py-1.5 lg:px-[18px] lg:py-2 lg:w-[114px] lg:h-[28px] text-xs lg:text-[10px] font-medium text-black rounded-[10px] transition-colors disabled:cursor-not-allowed ${isExpandedForForecast && activeForecast === 'hourly' ? 'bg-[#ffb36c]' : 'bg-gray-300/70 hover:bg-gray-400/50'}`}
             >
               Hourly forecast
             </button>
             <button
               onClick={e => { e.stopPropagation(); onShowWeekly(id); }}
               disabled={isRefreshing}
-              className={`px-3 py-1.5 lg:px-[18px] lg:py-2 lg:w-[117px] lg:h-[28px] text-xs lg:text-[10px] font-medium text-black rounded-[10px] transition-colors disabled:cursor-not-allowed ${isExpanded && activeForecast === 'weekly' ? 'bg-[#ffb36c]' : 'bg-gray-300/70 hover:bg-gray-400/50'}`}
+              className={`font-family-montserrat px-3 py-1.5 lg:px-[18px] lg:py-2 lg:w-[117px] lg:h-[28px] text-xs lg:text-[10px] font-medium text-black rounded-[10px] transition-colors disabled:cursor-not-allowed ${isExpandedForForecast && activeForecast === 'weekly' ? 'bg-[#ffb36c]' : 'bg-gray-300/70 hover:bg-gray-400/50'}`}
             >
               Weekly forecast
             </button>
@@ -176,7 +176,7 @@ const WeatherCard = ({
           </button>
 
           <button
-            onClick={e => { e.stopPropagation(); onSeeMore(); }}
+            onClick={e => { e.stopPropagation(); onSeeMoreClick(); }}
             disabled={isRefreshing}
             className="px-4 py-2 lg:px-[25px] lg:w-[99px] lg:h-[28px] text-sm lg:text-[10px] bg-[#ffb36c] rounded-[10px] hover:bg-orange-500 transition-colors disabled:cursor-not-allowed font-family-montserrat font-medium text-[10px] text-right text-black"
           >

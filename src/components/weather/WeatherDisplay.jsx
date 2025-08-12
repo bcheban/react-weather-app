@@ -4,15 +4,15 @@ import WeatherCard from './WeatherCard';
 const WeatherDisplay = forwardRef(({
   locations,
   onDeleteLocation,
-  onSelectLocation,
   selectedLocationId,
-  onSeeMore,
+  onCardClick,
+  onSeeMoreClick,
   onRefreshLocation,
   refreshingId,
   onShowHourly,
   onShowWeekly,
   activeForecasts,
-  expandedLocationId,
+  expandedView,
   likedLocations,
   onToggleLike,
   onAddLocationClick
@@ -46,14 +46,14 @@ const WeatherDisplay = forwardRef(({
               data={location}
               onDelete={() => onDeleteLocation(location.id)}
               isSelected={location.id === selectedLocationId}
-              onSelect={() => onSelectLocation(location.id)}
-              onSeeMore={() => onSeeMore(location.id)}
+              onCardClick={() => onCardClick(location.id)}
+              onSeeMoreClick={() => onSeeMoreClick(location.id)}
               onRefresh={() => onRefreshLocation(location.id)}
               isRefreshing={location.id === refreshingId}
               onShowHourly={onShowHourly}
               onShowWeekly={onShowWeekly}
               activeForecast={activeForecasts[location.id]}
-              expandedLocationId={expandedLocationId}
+              expandedView={expandedView}
               onToggleFavorite={onToggleLike}
               isFavorite={likedLocations.includes(location.id)}
             />
