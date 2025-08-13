@@ -18,7 +18,7 @@
 ## 📌 Project Overview
 
 React Weather App is a modern, responsive weather dashboard built using **React** and **Tailwind CSS**, powered by real-time data from multiple APIs.  
-It enables users to search for cities worldwide, check current weather conditions, view a **24-hour hourly forecast** and **7-day daily forecast**, enjoy curated **nature images** from Pixabay, and read the latest **general news**.  
+It enables users to search for cities worldwide, check current weather conditions, view a **24-hour hourly forecast** and **5-day daily forecast**, enjoy curated **nature images** from Pixabay, and read the latest **general news**.  
 
 The application includes **user registration via localStorage**, weather card management with **delete confirmation modals**, and account logout with confirmation prompts — all designed for smooth and intuitive UX.  
 
@@ -30,7 +30,7 @@ The application includes **user registration via localStorage**, weather card ma
 - **🌤 City Search** – Search weather by location name.  
 - **📊 Current Weather** – Temperature, weather condition, humidity, wind speed, and "feels like" temperature.  
 - **⏳ Hourly Forecast (24h)** – View detailed weather for the next 24 hours.  
-- **📅 Weekly Forecast (7 days)** – See extended daily trends for the week ahead.  
+- **📅 Weekly Forecast (5 days)** – See extended daily trends for the week ahead.  
 - **🗑 Weather Card Deletion** – Remove saved weather cards with confirmation modal.  
 - **🚪 Account Logout** – Logout confirmation modal before leaving the account.  
 - **📸 Nature Images** – Fetches 10 beautiful nature-related images from Pixabay for the selected city/country.  
