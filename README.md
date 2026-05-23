@@ -2,46 +2,32 @@
   <img src="https://raw.githubusercontent.com/bcheban/react-weather-app/main/src/assets/logo/logo.svg" alt="React Weather App Logo" width="120" />
 </p>
 
-<h1 align="center">React Weather App</h1>
+<h1 align="center">Weather Dashboard</h1>
 
 <p align="center">
-  <strong>Real-time weather forecasts, nature photography, and news — all in one responsive React app.</strong>
+  <strong>A weather dashboard with city search, current conditions, interactive charts, and toast notifications — built with React, Tailwind, and Chart.js.</strong>
 </p>
 
 <p align="center">
-  <a href="https://react-weather-dashboard.vercel.app/">Live Demo</a> |
-  <a href="https://github.com/bcheban/react-weather-app">GitHub Repo</a>
+  <a href="https://react-weather-dashboard.vercel.app/">🔗 Live Demo</a> |
+  <a href="https://github.com/bcheban/react-weather-app">💻 GitHub Repo</a>
 </p>
 
 ---
 
 ## 📌 Project Overview
 
-React Weather App is a modern, responsive weather dashboard built using **React** and **Tailwind CSS**, powered by real-time data from multiple APIs.  
-It enables users to search for cities worldwide, check current weather conditions, view a **24-hour hourly forecast** and **5-day daily forecast**, enjoy curated **nature images** from Pixabay, and read the latest **general news**.  
-
-The application includes **user registration via localStorage**, weather card management with **delete confirmation modals**, and account logout with confirmation prompts — all designed for smooth and intuitive UX.  
+A modern weather dashboard with a clean, dynamic UI. Search any city to see current conditions, an hourly / daily forecast, and rich interactive charts (temperature, humidity, wind). Built with **React** and styled with **TailwindCSS**; charts via **Chart.js**, user feedback via **React Toastify**, and icons via **react-icons**.
 
 ---
 
-## 🚀 Features
+## 🌐 Live Preview
 
-- **📝 User Registration** – Simple account creation stored in localStorage (no backend required).  
-- **🌤 City Search** – Search weather by location name.  
-- **📊 Current Weather** – Temperature, weather condition, humidity, wind speed, and "feels like" temperature.  
-- **⏳ Hourly Forecast (24h)** – View detailed weather for the next 24 hours.  
-- **📅 Weekly Forecast (5 days)** – See extended daily trends for the week ahead.  
-- **🗑 Weather Card Deletion** – Remove saved weather cards with confirmation modal.  
-- **🚪 Account Logout** – Logout confirmation modal before leaving the account.  
-- **📸 Nature Images** – Fetches 10 beautiful nature-related images from Pixabay for the selected city/country.  
-- **📰 News Feed** – Displays the latest general news from NewsAPI.  
-- **⭐ Favorites Management** – Add and remove favorite locations with local storage persistence.  
-- **📈 Weather Charts** – Visualize temperature and other metrics using Chart.js.  
-- **📱 Fully Responsive** – Optimized for all screen sizes.
+👉 **[https://react-weather-dashboard.vercel.app/](https://react-weather-dashboard.vercel.app/)**
 
 ---
 
-## 🛠 Tech Stack
+## 🛠 Technologies Used
 
 ### Core Framework & Build Tools
 <p>
@@ -51,41 +37,80 @@ The application includes **user registration via localStorage**, weather card ma
 
 ### Styling
 <p>
-  <img src="https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS" />
-  <img src="https://img.shields.io/badge/@tailwindcss_vite-0A74DA?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="@tailwindcss/vite" />
+  <img src="https://img.shields.io/badge/TailwindCSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="TailwindCSS" />
 </p>
 
-### UI & Icons
-<p>
-  <img src="https://img.shields.io/badge/React_Icons-61DAFB?style=for-the-badge&logo=react&logoColor=white" alt="React Icons" />
-  <img src="https://img.shields.io/badge/Swiper-0066FF?style=for-the-badge&logo=swiper&logoColor=white" alt="Swiper" />
-</p>
-
-### Forms & Validation
-<p>
-  <img src="https://img.shields.io/badge/Formik-FF6F61?style=for-the-badge&logo=formik&logoColor=white" alt="Formik" />
-  <img src="https://img.shields.io/badge/Yup-5F43E7?style=for-the-badge&logo=javascript&logoColor=white" alt="Yup" />
-</p>
-
-### Data Visualization
+### Charts & UI
 <p>
   <img src="https://img.shields.io/badge/Chart.js-FF6384?style=for-the-badge&logo=chartdotjs&logoColor=white" alt="Chart.js" />
-  <img src="https://img.shields.io/badge/React_Chartjs_2-FF6384?style=for-the-badge&logo=react&logoColor=white" alt="React Chartjs 2" />
-</p>
-
-### Notifications
-<p>
-  <img src="https://img.shields.io/badge/React_Toastify-FF6F61?style=for-the-badge&logo=react&logoColor=white" alt="React Toastify" />
-</p>
-
-### APIs & Services
-<p>
-  <img src="https://img.shields.io/badge/OpenWeather_API-FF5733?style=for-the-badge&logo=cloud&logoColor=white" alt="OpenWeather API" />
-  <img src="https://img.shields.io/badge/Pixabay_API-2ECC71?style=for-the-badge&logo=pixabay&logoColor=white" alt="Pixabay API" />
-  <img src="https://img.shields.io/badge/NewsAPI-000000?style=for-the-badge&logo=news&logoColor=white" alt="NewsAPI" />
+  <img src="https://img.shields.io/badge/React_Toastify-EC4899?style=for-the-badge&logo=react&logoColor=white" alt="React Toastify" />
+  <img src="https://img.shields.io/badge/React_Icons-1A1A1A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React Icons" />
 </p>
 
 ### Deployment
 <p>
   <img src="https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Vercel" />
+</p>
+
+---
+
+## ⚙️ Getting Started
+
+### 📋 Prerequisites
+
+- **Node.js** `v20.x` or higher
+- **npm** `v10.x` or higher
+- A weather API key (e.g. OpenWeatherMap)
+
+### 📦 Installation
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/bcheban/react-weather-app.git
+   cd react-weather-app
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Configure environment:** create `.env` with your weather API key (see `.env.example`).
+
+4. **Start the dev server:**
+   ```bash
+   npm run dev
+   ```
+   The app will open at [http://localhost:5173](http://localhost:5173).
+
+### 🧰 Available Scripts
+
+| Script             | Description                                  |
+| ------------------ | -------------------------------------------- |
+| `npm run dev`      | Start the local Vite dev server              |
+| `npm run build`    | Create a production build in `/dist`         |
+| `npm run preview`  | Preview the production build locally         |
+| `npm run lint`     | Run ESLint across the project                |
+
+---
+
+## 🚀 Features
+
+- **🌆 City Search** – Type a city to fetch its current weather.
+- **🌡️ Current Conditions** – Temperature, "feels like", humidity, wind, pressure.
+- **📈 Interactive Charts** – Temperature / humidity / wind plotted with Chart.js.
+- **🔔 Toast Feedback** – Error and success notifications via React Toastify.
+- **🎨 Clean UI** – Mobile-first Tailwind layout.
+- **📱 Fully Responsive** – Works across phone, tablet, desktop.
+
+---
+
+## 📊 Lighthouse
+
+![Lighthouse scores](docs/lighthouse.png)
+
+---
+
+<p align="center">
+  Made with ❤️ by <a href="https://github.com/bcheban">@bcheban</a>
 </p>
