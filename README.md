@@ -107,7 +107,11 @@ A modern weather dashboard with a clean, dynamic UI. Search any city to see curr
 
 ## 📊 Lighthouse
 
-![Lighthouse scores](docs/lighthouse.png)
+<p>
+  <img src="https://bohdancheban-portfolio.vercel.app/api/lighthouse?url=https%3A%2F%2Freact-weather-dashboard.vercel.app&strategy=mobile" alt="Lighthouse mobile scores" />
+  <img src="https://bohdancheban-portfolio.vercel.app/api/lighthouse?url=https%3A%2F%2Freact-weather-dashboard.vercel.app&strategy=desktop" alt="Lighthouse desktop scores" />
+</p>
+
 
 ---
 
